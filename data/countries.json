@@ -1,0 +1,9 @@
+[
+  { "code": "FR", "name": { "en": "France", "fr": "France" }, "status": "beta" },
+  { "code": "BE", "name": { "en": "Belgium", "fr": "Belgique" }, "status": "planned" },
+  { "code": "CH", "name": { "en": "Switzerland", "fr": "Suisse" }, "status": "planned" },
+  { "code": "GB", "name": { "en": "United Kingdom", "fr": "Royaume-Uni" }, "status": "planned" },
+  { "code": "IE", "name": { "en": "Ireland", "fr": "Irlande" }, "status": "planned" },
+  { "code": "DE", "name": { "en": "Germany", "fr": "Allemagne" }, "status": "planned" },
+  { "code": "US", "name": { "en": "United States", "fr": "États-Unis" }, "status": "planned" }
+]

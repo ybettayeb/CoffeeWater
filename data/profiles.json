@@ -1,0 +1,50 @@
+[
+  {
+    "id": "filter-light",
+    "label": { "en": "Filter, light roast", "fr": "Filtre, torréfaction claire" },
+    "methods": ["filter"],
+    "description": "Moderate hardness for extraction, low alkalinity to keep acidity bright.",
+    "targets": {
+      "gh": { "min": 40, "ideal": 70, "max": 100, "weight": 1 },
+      "kh": { "min": 10, "ideal": 25, "max": 40, "weight": 1 },
+      "sodium": { "max": 30, "weight": 0.3 },
+      "chloride": { "max": 50, "weight": 0.2 }
+    }
+  },
+  {
+    "id": "filter-medium-dark",
+    "label": { "en": "Filter, medium/dark roast", "fr": "Filtre, torréfaction moyenne/foncée" },
+    "methods": ["filter"],
+    "description": "More buffering to tame roasty bitterness. Close to the SCA standard.",
+    "targets": {
+      "gh": { "min": 50, "ideal": 75, "max": 110, "weight": 1 },
+      "kh": { "min": 30, "ideal": 40, "max": 60, "weight": 1 },
+      "sodium": { "max": 30, "weight": 0.3 },
+      "chloride": { "max": 50, "weight": 0.2 }
+    }
+  },
+  {
+    "id": "espresso",
+    "label": { "en": "Espresso", "fr": "Espresso" },
+    "methods": ["espresso"],
+    "description": "Moderate hardness to limit scale, enough alkalinity to buffer, low chloride to protect the machine.",
+    "targets": {
+      "gh": { "min": 40, "ideal": 65, "max": 90, "weight": 1 },
+      "kh": { "min": 30, "ideal": 45, "max": 70, "weight": 1 },
+      "sodium": { "max": 30, "weight": 0.3 },
+      "chloride": { "max": 30, "weight": 0.5 }
+    }
+  },
+  {
+    "id": "sca-standard",
+    "label": { "en": "SCA water standard", "fr": "Standard SCA" },
+    "methods": ["filter", "espresso"],
+    "description": "SCA Water Quality Handbook targets. The SCA states calcium hardness, approximated here by GH.",
+    "targets": {
+      "gh": { "min": 17, "ideal": 68, "max": 85, "weight": 1 },
+      "kh": { "min": 30, "ideal": 40, "max": 50, "weight": 1 },
+      "tds": { "min": 75, "ideal": 150, "max": 250, "weight": 0.3 },
+      "sodium": { "ideal": 10, "max": 30, "weight": 0.2 }
+    }
+  }
+]

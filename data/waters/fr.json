@@ -1,0 +1,131 @@
+[
+  {
+    "id": "montcalm",
+    "brand": "Montcalm",
+    "name": "Montcalm",
+    "type": "mineral",
+    "sparkling": false,
+    "countries": ["FR"],
+    "composition": {
+      "calcium": 3,
+      "magnesium": 0.7,
+      "sodium": 2.2,
+      "potassium": 0.6,
+      "bicarbonate": 5.2,
+      "sulfate": 10,
+      "chloride": 0.6,
+      "nitrate": 0.7,
+      "silica": 7.5,
+      "tds": 32,
+      "ph": 6.8
+    },
+    "source": {
+      "url": "https://www.naturalia.fr/produit/eau-montcalm-50cl",
+      "retrieved": "2026-10-25",
+      "note": "Retailer listing. Bicarbonate is 5.2 on some listings and 6 on others; check against a label."
+    },
+    "verified": false
+  },
+  {
+    "id": "vittel-grande-source",
+    "brand": "Vittel",
+    "name": "Vittel Grande Source",
+    "type": "mineral",
+    "sparkling": false,
+    "countries": ["FR", "BE", "CH", "DE", "GB"],
+    "composition": {
+      "calcium": 240,
+      "magnesium": 42,
+      "sodium": 5.2,
+      "potassium": 2.2,
+      "bicarbonate": 384,
+      "sulfate": 400,
+      "chloride": 7.3,
+      "nitrate": 4.4,
+      "fluoride": 0.17,
+      "tds": 1084,
+      "ph": 7.1
+    },
+    "source": {
+      "url": "https://nutripro.nestle.fr/sites/default/files/2024-08/Tableau%20des%20eaux%20min%C3%A9rales%20naturelles%20plates.pdf",
+      "retrieved": "2026-10-25",
+      "note": "Nestlé Waters table (2024). Older 'Vittel' figures (Ca 202 / HCO3 402) belong to another label."
+    },
+    "verified": false
+  },
+  {
+    "id": "volvic",
+    "brand": "Volvic",
+    "name": "Volvic",
+    "type": "mineral",
+    "sparkling": false,
+    "countries": ["FR", "BE", "CH", "DE", "GB", "IE"],
+    "composition": {
+      "calcium": 12,
+      "magnesium": 8,
+      "sodium": 12,
+      "potassium": 6,
+      "bicarbonate": 74,
+      "sulfate": 9,
+      "chloride": 15,
+      "nitrate": 7.3,
+      "silica": 32,
+      "tds": 130,
+      "ph": 7
+    },
+    "source": {
+      "url": "https://www.dunnesstoresgrocery.com/sm/delivery/rsid/341/product/volvic-natural-mineral-water-6-x-15l-id-100299422",
+      "retrieved": "2026-10-25",
+      "note": "Retailer listings agree with each other. Bicarbonate is 71 on some older labels."
+    },
+    "verified": false
+  },
+  {
+    "id": "evian",
+    "brand": "Evian",
+    "name": "Evian",
+    "type": "mineral",
+    "sparkling": false,
+    "countries": ["FR", "BE", "CH", "DE", "GB", "IE", "US"],
+    "composition": {
+      "calcium": 80,
+      "magnesium": 26,
+      "sodium": 6.5,
+      "potassium": 1,
+      "bicarbonate": 360,
+      "sulfate": 14,
+      "chloride": 10,
+      "nitrate": 3.8,
+      "silica": 15,
+      "tds": 345,
+      "ph": 7.2
+    },
+    "source": {
+      "url": "https://www.evian.com/en_int/products/everyday-range/1l/",
+      "retrieved": "2026-10-25"
+    },
+    "verified": false
+  },
+  {
+    "id": "distilled",
+    "brand": "Generic",
+    "name": "Distilled / reverse-osmosis water",
+    "type": "distilled",
+    "sparkling": false,
+    "countries": ["FR"],
+    "composition": {
+      "calcium": 0,
+      "magnesium": 0,
+      "sodium": 0,
+      "potassium": 0,
+      "bicarbonate": 0,
+      "sulfate": 0,
+      "chloride": 0,
+      "tds": 0
+    },
+    "source": {
+      "note": "Synthetic entry. Only use food-grade water (not iron/battery 'eau déminéralisée')."
+    },
+    "verified": true
+  }
+]
