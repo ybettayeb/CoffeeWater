@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "note": "Tendencies, not guarantees. Water can only emphasise or mute flavours already in the coffee. Each dimension score = sum of weighted terms (each 0..1), multiplied by any gates. Shapes: 'up' [a,b] = 0 below a, 1 above b; 'down' = the reverse; 'band' [a,b,c,d] = trapezoid (1 between b and c).",
+  "dimensions": [
+    {
+      "id": "acidity",
+      "label": { "en": "Bright acidity", "fr": "Acidité vive" },
+      "examples": { "en": "citrus, green apple, lively", "fr": "agrumes, pomme verte, vivacité" },
+      "confidence": "high",
+      "why": {
+        "en": "Low alkalinity (KH) leaves the coffee's acids un-neutralised, so the cup tastes brighter.",
+        "fr": "Une faible alcalinité (KH) neutralise peu les acides du café : la tasse est plus vive."
+      },
+      "terms": [
+        { "feature": "kh", "shape": "down", "points": [10, 70], "weight": 0.85 },
+        { "feature": "mgShare", "shape": "up", "points": [0.2, 0.6], "weight": 0.15 }
+      ]
+    },
+    {
+      "id": "floral",
+      "label": { "en": "Florals & tea-like clarity", "fr": "Floral & clarté" },
+      "examples": { "en": "jasmine, bergamot, black tea", "fr": "jasmin, bergamote, thé noir" },
+      "confidence": "medium",
+      "why": {
+        "en": "Delicate aromatics come through in clean, lightly mineralised water with little buffering; heavy minerals or sulfates cover them.",
+        "fr": "Les arômes délicats ressortent dans une eau légère et peu tamponnée ; trop de minéraux ou de sulfates les masquent."
+      },
+      "terms": [
+        { "feature": "kh", "shape": "down", "points": [15, 50], "weight": 0.5 },
+        { "feature": "gh", "shape": "band", "points": [20, 40, 75, 120], "weight": 0.3 },
+        { "feature": "tds", "shape": "down", "points": [100, 300], "weight": 0.2 }
+      ],
+      "gates": [{ "feature": "sulfate", "shape": "down", "points": [100, 300] }]
+    },
+    {
+      "id": "fruit",
+      "label": { "en": "Fruit", "fr": "Fruité" },
+      "examples": { "en": "berries, stone fruit, tropical", "fr": "fruits rouges, fruits à noyau, exotiques" },
+      "confidence": "medium",
+      "why": {
+        "en": "Fruit needs enough hardness to extract and low buffering to stay vivid; magnesium is often credited with sharper, fruit-forward cups.",
+        "fr": "Le fruité demande assez de dureté pour l'extraction et peu d'alcalinité ; le magnésium est réputé accentuer le fruit."
+      },
+      "terms": [
+        { "feature": "kh", "shape": "down", "points": [20, 70], "weight": 0.45 },
+        { "feature": "gh", "shape": "band", "points": [30, 50, 100, 150], "weight": 0.35 },
+        { "feature": "mgShare", "shape": "up", "points": [0.2, 0.6], "weight": 0.2 }
+      ]
+    },
+    {
+      "id": "sweetness",
+      "label": { "en": "Sweetness & balance", "fr": "Douceur & équilibre" },
+      "examples": { "en": "caramel, honey, brown sugar", "fr": "caramel, miel, sucre roux" },
+      "confidence": "medium",
+      "why": {
+        "en": "Moderate hardness and moderate alkalinity balance acidity against bitterness, which reads as sweetness.",
+        "fr": "Dureté et alcalinité modérées équilibrent acidité et amertume, perçues comme de la douceur."
+      },
+      "terms": [
+        { "feature": "kh", "shape": "band", "points": [10, 25, 45, 70], "weight": 0.5 },
+        { "feature": "gh", "shape": "band", "points": [30, 50, 110, 160], "weight": 0.5 }
+      ]
+    },
+    {
+      "id": "body",
+      "label": { "en": "Body & mouthfeel", "fr": "Corps & texture" },
+      "examples": { "en": "syrupy, creamy, round", "fr": "sirupeux, crémeux, rond" },
+      "confidence": "medium",
+      "why": {
+        "en": "More minerals (especially calcium) give a heavier, rounder texture.",
+        "fr": "Plus de minéraux (surtout le calcium) donnent une texture plus ronde et plus lourde."
+      },
+      "terms": [
+        { "feature": "gh", "shape": "up", "points": [30, 150], "weight": 0.5 },
+        { "feature": "tds", "shape": "up", "points": [50, 250], "weight": 0.25 },
+        { "feature": "mgShare", "shape": "down", "points": [0.2, 0.6], "weight": 0.25 }
+      ]
+    },
+    {
+      "id": "chocolate",
+      "label": { "en": "Chocolate, nuts & roast", "fr": "Chocolat, fruits secs & torréfaction" },
+      "examples": { "en": "cocoa, hazelnut, toast", "fr": "cacao, noisette, pain grillé" },
+      "confidence": "medium",
+      "why": {
+        "en": "Higher alkalinity mutes acidity, so the deeper roast and cocoa notes take the lead.",
+        "fr": "Une alcalinité plus élevée atténue l'acidité : les notes de cacao et de torréfaction dominent."
+      },
+      "terms": [
+        { "feature": "kh", "shape": "up", "points": [25, 80], "weight": 0.6 },
+        { "feature": "gh", "shape": "up", "points": [40, 140], "weight": 0.4 }
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "id": "thin",
+      "label": { "en": "Thin, under-extracted", "fr": "Maigre, sous-extrait" },
+      "why": { "en": "Too few minerals to extract flavour: hollow, sour cups.", "fr": "Trop peu de minéraux pour extraire : tasse creuse et acide." },
+      "confidence": "high",
+      "when": { "feature": "gh", "lt": 25 }
+    },
+    {
+      "id": "sour",
+      "label": { "en": "Sharp or sour", "fr": "Acidité agressive" },
+      "why": { "en": "Almost no buffering: acidity can turn sharp.", "fr": "Quasi aucun pouvoir tampon : l'acidité peut devenir agressive." },
+      "confidence": "high",
+      "when": { "feature": "kh", "lt": 8 }
+    },
+    {
+      "id": "flat",
+      "label": { "en": "Flat, muted acidity", "fr": "Plat, acidité éteinte" },
+      "why": { "en": "So much alkalinity that acidity and aromatics disappear.", "fr": "Tant d'alcalinité que l'acidité et les arômes disparaissent." },
+      "confidence": "high",
+      "when": { "feature": "kh", "gt": 80 }
+    },
+    {
+      "id": "chalky",
+      "label": { "en": "Chalky, harsh", "fr": "Crayeux, dur" },
+      "why": { "en": "Very hard water over-extracts and coats the palate.", "fr": "Une eau très dure sur-extrait et tapisse le palais." },
+      "confidence": "medium",
+      "when": { "feature": "gh", "gt": 160 }
+    },
+    {
+      "id": "dry",
+      "label": { "en": "Dry, bitter finish", "fr": "Finale sèche, amère" },
+      "why": { "en": "High sulfate is associated with a drier, more bitter finish (well known in beer, less studied in coffee).", "fr": "Beaucoup de sulfates : finale plus sèche et amère (connu en brasserie, moins étudié pour le café)." },
+      "confidence": "low",
+      "when": { "feature": "sulfate", "gt": 250 }
+    },
+    {
+      "id": "salty",
+      "label": { "en": "Salty, dull", "fr": "Salé, terne" },
+      "why": { "en": "Above ~30 mg/L sodium starts to read as salty and dulls sweetness.", "fr": "Au-delà de ~30 mg/L de sodium, la tasse devient salée et terne." },
+      "confidence": "medium",
+      "when": { "feature": "sodium", "gt": 30 }
+    }
+  ]
+}

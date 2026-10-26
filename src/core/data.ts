@@ -1,7 +1,18 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
-import { CountrySchema, ProfileSchema, WaterSchema, type Country, type Profile, type Water } from "./schema.js";
+import {
+  CoffeeStyleSchema,
+  CountrySchema,
+  FlavorModelSchema,
+  ProfileSchema,
+  WaterSchema,
+  type CoffeeStyle,
+  type Country,
+  type FlavorModel,
+  type Profile,
+  type Water,
+} from "./schema.js";
 
 const DATA_DIR = join(import.meta.dirname, "..", "..", "data");
 
@@ -19,6 +30,14 @@ export function loadProfiles(path = join(DATA_DIR, "profiles.json")): Profile[] 
 
 export function loadCountries(path = join(DATA_DIR, "countries.json")): Country[] {
   return z.array(CountrySchema).parse(readJson(path));
+}
+
+export function loadFlavorModel(path = join(DATA_DIR, "flavor-model.json")): FlavorModel {
+  return FlavorModelSchema.parse(readJson(path));
+}
+
+export function loadCoffeeStyles(path = join(DATA_DIR, "coffee-styles.json")): CoffeeStyle[] {
+  return z.array(CoffeeStyleSchema).parse(readJson(path));
 }
 
 export function watersForCountry(waters: Water[], country: string): Water[] {

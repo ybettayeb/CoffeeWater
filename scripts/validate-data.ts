@@ -1,6 +1,7 @@
 /** Validate data/: schema, unique ids, ionic balance, TDS plausibility. Exits non-zero on error. */
 import { ionicBalanceError } from "../src/core/chemistry.js";
-import { loadCountries, loadProfiles, loadWaters } from "../src/core/data.js";
+import { loadCoffeeStyles, loadCountries, loadFlavorModel, loadProfiles, loadWaters } from "../src/core/data.js";
+import { FLAVOR_DIMENSIONS } from "../src/core/schema.js";
 
 const errors: string[] = [];
 const warnings: string[] = [];
@@ -47,7 +48,26 @@ for (const p of profiles) {
   }
 }
 
+const model = loadFlavorModel();
+const styles = loadCoffeeStyles();
+const dimIds = model.dimensions.map((d) => d.id);
+for (const id of FLAVOR_DIMENSIONS) if (!dimIds.includes(id)) errors.push(`flavor model: missing dimension ${id}`);
+if (new Set(dimIds).size !== dimIds.length) errors.push("flavor model: duplicate dimension");
+for (const d of model.dimensions)
+  for (const t of [...d.terms, ...(d.gates ?? [])]) {
+    const expected = t.shape === "band" ? 4 : 2;
+    if (t.points.length !== expected) errors.push(`flavor ${d.id}.${t.feature}: ${t.shape} needs ${expected} points`);
+    if (t.points.some((p, i) => i > 0 && p < t.points[i - 1]))
+      errors.push(`flavor ${d.id}.${t.feature}: points must be ascending`);
+  }
+for (const s of styles)
+  for (const id of FLAVOR_DIMENSIONS)
+    if (s.potential[id] === undefined) errors.push(`coffee style ${s.id}: missing potential.${id}`);
+
 for (const w of warnings) console.warn(`warn  ${w}`);
 for (const e of errors) console.error(`error ${e}`);
-console.log(`${waters.length} waters, ${profiles.length} profiles, ${countries.length} countries`);
+console.log(
+  `${waters.length} waters, ${profiles.length} profiles, ${countries.length} countries, ` +
+    `${model.dimensions.length} flavour dimensions, ${styles.length} coffee styles`,
+);
 if (errors.length) process.exit(1);

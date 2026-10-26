@@ -19,18 +19,27 @@ Your answers will shape Phase 1. Defaults that are already in the draft are in *
    next to the computed results, or computed results only?
 9. Custom target sliders (GH/KH) for advanced users, at launch or later?
 
+## Flavours
+10. Are the six flavour dimensions right? (*bright acidity, florals, fruit, sweetness, body,
+    chocolate/nuts/roast*.) Split fruit into citrus / red fruit / tropical? Add "spice" or "winey"?
+11. How should the coffee be described: **a few style presets** (washed light, natural light,
+    medium, dark blend), free-text roaster notes ("jasmine, peach"), or both?
+12. How should flavours be shown: **bars**, a radar chart, a flavour wheel, or chips?
+13. Do you have taste notes from your own blends (e.g. what Montcalm 92/8 brings out vs Volvic)?
+    They're the best way to calibrate the model before user feedback exists.
+
 ## Data
-10. Do you already have a list or spreadsheet of waters and compositions? Where do your reference
+14. Do you already have a list or spreadsheet of waters and compositions? Where do your reference
     ratios come from?
-11. Should the dataset be **open** (e.g. CC-BY-SA, contributions via GitHub), or kept private?
-12. Track **which shops** carry each water (Carrefour, Leclerc, Monoprix, Lidl…)? And price per litre?
+15. Should the dataset be **open** (e.g. CC-BY-SA, contributions via GitHub), or kept private?
+16. Track **which shops** carry each water (Carrefour, Leclerc, Monoprix, Lidl…)? And price per litre?
 
 ## Product
-13. Accounts / saved blends / taste feedback: needed, or is **no-account + shareable links** fine?
-14. Monetisation: none, donations, or affiliate links?
-15. Do you want a mobile app eventually, or is a **mobile-friendly website / PWA** enough?
-16. Branding: a name or domain in mind? ("CoffeeWater" for now.)
+17. Accounts / saved blends / taste feedback: needed, or is **no-account + shareable links** fine?
+18. Monetisation: none, donations, or affiliate links?
+19. Do you want a mobile app eventually, or is a **mobile-friendly website / PWA** enough?
+20. Branding: a name or domain in mind? ("CoffeeWater" for now.)
 
 ## Tech
-17. Any stack preference? Draft: **Astro + Preact + Tailwind, static on Cloudflare Pages**.
+21. Any stack preference? Draft: **Astro + Preact + Tailwind, static on Cloudflare Pages**.
     Alternatives: Next.js, SvelteKit.

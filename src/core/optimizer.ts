@@ -1,5 +1,6 @@
 import { blendComposition, metrics, type BlendPart, type Metrics } from "./chemistry.js";
-import type { Profile, Range, Water } from "./schema.js";
+import { emphasisFor, flavorReport } from "./flavor.js";
+import type { FlavorDimensionId, FlavorModel, Profile, Range, Water } from "./schema.js";
 
 export interface OptimizeOptions {
   /** Max number of waters in a blend (1–3). */
@@ -12,6 +13,13 @@ export interface OptimizeOptions {
   minShare?: number;
   /** Score added per extra water, to prefer simpler recipes. */
   complexityPenalty?: number;
+  /**
+   * Flavour goals, e.g. ["floral", "fruit"]. Each blend's score gets
+   * `emphasisWeight × (1 − mean emphasis)` added, so the profile's ranges still apply.
+   */
+  emphasize?: FlavorDimensionId[];
+  emphasisWeight?: number;
+  flavorModel?: FlavorModel;
   includeSparkling?: boolean;
   includeDistilled?: boolean;
   limit?: number;
@@ -23,12 +31,16 @@ export interface BlendResult {
   score: number;
 }
 
-const DEFAULTS: Required<OptimizeOptions> = {
+type Resolved = Required<Omit<OptimizeOptions, "flavorModel">> & Pick<OptimizeOptions, "flavorModel">;
+
+const DEFAULTS: Resolved = {
   maxComponents: 2,
   pairStep: 1,
   tripleStep: 5,
   minShare: 3,
   complexityPenalty: 0.05,
+  emphasize: [],
+  emphasisWeight: 1,
   includeSparkling: false,
   includeDistilled: false,
   limit: 5,
@@ -61,9 +73,11 @@ export function score(m: Metrics, profile: Profile): number {
   return s;
 }
 
-function evaluate(parts: BlendPart[], profile: Profile, complexityPenalty: number): BlendResult {
+function evaluate(parts: BlendPart[], profile: Profile, o: Resolved): BlendResult {
   const m = metrics(blendComposition(parts));
-  return { parts, metrics: m, score: score(m, profile) + complexityPenalty * (parts.length - 1) };
+  let s = score(m, profile) + o.complexityPenalty * (parts.length - 1);
+  if (o.emphasize.length) s += o.emphasisWeight * (1 - emphasisFor(flavorReport(m, o.flavorModel!), o.emphasize));
+  return { parts, metrics: m, score: s };
 }
 
 export function candidates(waters: Water[], opts: OptimizeOptions = {}): Water[] {
@@ -76,10 +90,11 @@ export function candidates(waters: Water[], opts: OptimizeOptions = {}): Water[]
 /** Find the best single waters, pairs and (optionally) triples for a profile. */
 export function optimize(waters: Water[], profile: Profile, opts: OptimizeOptions = {}): BlendResult[] {
   const o = { ...DEFAULTS, ...opts };
+  if (o.emphasize.length && !o.flavorModel) throw new Error("`emphasize` requires `flavorModel`");
   const pool = candidates(waters, o);
   const best: BlendResult[] = [];
 
-  for (const w of pool) best.push(evaluate([{ water: w, fraction: 1 }], profile, o.complexityPenalty));
+  for (const w of pool) best.push(evaluate([{ water: w, fraction: 1 }], profile, o));
 
   if (o.maxComponents >= 2) {
     for (let i = 0; i < pool.length; i++) {
@@ -92,7 +107,7 @@ export function optimize(waters: Water[], profile: Profile, opts: OptimizeOption
               { water: pool[j], fraction: 1 - p / 100 },
             ],
             profile,
-            o.complexityPenalty,
+            o,
           );
           if (!top || r.score < top.score) top = r;
         }
@@ -117,7 +132,7 @@ export function optimize(waters: Water[], profile: Profile, opts: OptimizeOption
                   { water: pool[k], fraction: (100 - a - b) / 100 },
                 ],
                 profile,
-                o.complexityPenalty,
+                o,
               );
               if (!top || r.score < top.score) top = r;
             }

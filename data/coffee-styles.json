@@ -1,0 +1,22 @@
+[
+  {
+    "id": "washed-light",
+    "label": { "en": "Washed, light roast (e.g. Ethiopia, Kenya)", "fr": "Lavé, torréfaction claire (Éthiopie, Kenya…)" },
+    "potential": { "acidity": 0.9, "floral": 0.9, "fruit": 0.7, "sweetness": 0.6, "body": 0.3, "chocolate": 0.1 }
+  },
+  {
+    "id": "natural-light",
+    "label": { "en": "Natural/anaerobic, light roast", "fr": "Nature/anaérobie, torréfaction claire" },
+    "potential": { "acidity": 0.7, "floral": 0.5, "fruit": 1.0, "sweetness": 0.8, "body": 0.6, "chocolate": 0.2 }
+  },
+  {
+    "id": "medium-latam",
+    "label": { "en": "Medium roast (e.g. Colombia, Guatemala)", "fr": "Torréfaction moyenne (Colombie, Guatemala…)" },
+    "potential": { "acidity": 0.5, "floral": 0.3, "fruit": 0.5, "sweetness": 0.9, "body": 0.6, "chocolate": 0.6 }
+  },
+  {
+    "id": "dark-blend",
+    "label": { "en": "Dark roast / classic espresso blend (e.g. Brazil)", "fr": "Torréfaction foncée / assemblage espresso (Brésil…)" },
+    "potential": { "acidity": 0.2, "floral": 0.1, "fruit": 0.2, "sweetness": 0.6, "body": 0.9, "chocolate": 1.0 }
+  }
+]

@@ -42,7 +42,7 @@ const RangeSchema = z.object({
   weight: z.number().positive(),
 });
 
-export const METRICS = ["gh", "kh", "tds", "sodium", "chloride", "sulfate", "caMgRatio"] as const;
+export const METRICS = ["gh", "kh", "tds", "sodium", "chloride", "sulfate", "caMgRatio", "mgShare"] as const;
 export type Metric = (typeof METRICS)[number];
 
 export const ProfileSchema = z.object({
@@ -59,6 +59,55 @@ export const CountrySchema = z.object({
   status: z.enum(["live", "beta", "planned"]),
 });
 
+const LocalizedSchema = z.record(z.string(), z.string());
+
+export const FLAVOR_DIMENSIONS = ["acidity", "floral", "fruit", "sweetness", "body", "chocolate"] as const;
+export type FlavorDimensionId = (typeof FLAVOR_DIMENSIONS)[number];
+
+const ConfidenceSchema = z.enum(["high", "medium", "low"]);
+
+const ShapeTermSchema = z.object({
+  feature: z.enum(METRICS),
+  shape: z.enum(["up", "down", "band"]),
+  /** 'up'/'down': [a, b]; 'band': [a, b, c, d]. Must be ascending. */
+  points: z.array(z.number()).min(2).max(4),
+});
+
+export const FlavorModelSchema = z.object({
+  version: z.number().int(),
+  note: z.string().optional(),
+  dimensions: z.array(
+    z.object({
+      id: z.enum(FLAVOR_DIMENSIONS),
+      label: LocalizedSchema,
+      examples: LocalizedSchema,
+      confidence: ConfidenceSchema,
+      why: LocalizedSchema,
+      terms: z.array(ShapeTermSchema.extend({ weight: z.number().positive() })).min(1),
+      gates: z.array(ShapeTermSchema).optional(),
+    }),
+  ),
+  warnings: z.array(
+    z.object({
+      id: z.string(),
+      label: LocalizedSchema,
+      why: LocalizedSchema,
+      confidence: ConfidenceSchema,
+      when: z.object({ feature: z.enum(METRICS), lt: z.number().optional(), gt: z.number().optional() }),
+    }),
+  ),
+});
+
+export const CoffeeStyleSchema = z.object({
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  label: LocalizedSchema,
+  /** How much of each flavour the coffee itself carries (0..1). Water can't add what isn't there. */
+  potential: z.record(z.enum(FLAVOR_DIMENSIONS), z.number().min(0).max(1)),
+});
+
+export type FlavorModel = z.infer<typeof FlavorModelSchema>;
+export type ShapeTerm = z.infer<typeof ShapeTermSchema>;
+export type CoffeeStyle = z.infer<typeof CoffeeStyleSchema>;
 export type Composition = z.infer<typeof CompositionSchema>;
 export type Water = z.infer<typeof WaterSchema>;
 export type Range = z.infer<typeof RangeSchema>;

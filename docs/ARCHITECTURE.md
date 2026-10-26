@@ -112,6 +112,45 @@ and user-defined targets (sliders).
 `Σ fᵢ·cᵢ`, which is linear. The output shows the ratio, the per-litre volumes ("920 mL Montcalm +
 80 mL Vittel"), and "bottle math" (e.g. *one 1.5 L Montcalm + 130 mL Vittel*).
 
+### 3.5 Flavour model: which flavours the water brings out
+
+Users think in **flavours**, not GH/KH. Each blend gets a **flavour profile** on six dimensions:
+*bright acidity, florals & tea-like clarity, fruit, sweetness & balance, body & mouthfeel,
+chocolate/nuts/roast*. It also gets **warnings**: thin, sour, flat, chalky, dry/bitter, salty.
+
+```
+ water composition ──▶ metrics (GH, KH, Mg share, TDS, Na, SO₄, Cl)
+                              │
+                              ▼  data/flavor-model.json (tunable, no code)
+                     water emphasis per dimension (0..1) + warnings
+                              │
+     coffee style ───────────▶×  data/coffee-styles.json (what the coffee carries)
+                              ▼
+                     "in your cup": florals ████████ fruit █████ …
+```
+
+- **Rules are data.** Each dimension is a weighted sum of simple shapes over the metrics
+  (`up`, `down`, `band`), with optional multiplying *gates*. For example: florals rise as KH falls,
+  peak at moderate GH, and are gated down by high sulfate. Weights can be tuned by hand
+  now and **fitted to user taste feedback later** (Phase 3).
+- **Grounded but honest.** Every dimension and warning carries a `confidence` (high/medium/low)
+  and a plain-language `why`, which the UI shows.
+  - *High:* alkalinity buffers acidity (low KH gives bright cups, high KH flat ones); too few minerals give
+    thin/sour cups, too many chalky ones.
+  - *Medium:* the magnesium-vs-calcium effect (Mg tends to be fruit-forward and sharper, Ca rounder with more body),
+    from the Hendon et al. 2014 binding study and *Water for Coffee*. Sodium reading as salty above ~30 mg/L.
+  - *Low:* sulfate drying out the finish (borrowed from brewing science).
+- **The coffee matters.** Water can only emphasise what's in the cup. A coffee style (or, later,
+  the roaster's tasting notes) gives a *potential* per dimension, and the predicted cup is
+  `potential × water emphasis`. A dark Brazil won't turn floral.
+- **Two ways in:**
+  1. *"What will this water do?"* Every blend card and water page shows the flavour bars,
+     the warnings, and a one-line summary ("brings out florals and bright acidity, lighter body").
+  2. *"I want florals."* Flavour goals feed the optimiser as a bonus term on top of the brew
+     profile's ranges, so a blend that tastes floral but would scale up an espresso machine still loses.
+- UI: a radar or bar chart per blend, flavour chips ("🌸 florals", "🍓 fruit", "🍫 chocolate"),
+  and a tooltip with the `why` and the confidence. Clearly worded as tendencies.
+
 ---
 
 ## 4. Optimiser
@@ -125,7 +164,8 @@ excluded, plus **distilled/RO water** if the user allows it), and a target profi
 3. **Triples** (optional toggle): coarse 5 % grid, then refine around the best point.
 4. **Score** = Σ wₖ · ((valueₖ − idealₖ) / scaleₖ)² + hard-ish penalties outside the
    ranges, plus extra penalties (e.g. Cl⁻ > 30 mg/L for espresso).
-5. Apply **practicality** rules. Prefer blends that use fewer waters, round ratios
+5. Optional **flavour goals**: add `w · (1 − mean emphasis of the wanted dimensions)` (see 3.5).
+6. Apply **practicality** rules. Prefer blends that use fewer waters, round ratios
    (to 5 % or 1 %), and a minor component of at least ~3 % (hard to measure below that). Show the
    top N, de-duplicated.
 
@@ -145,7 +185,9 @@ Triples: 9,880 × ~231 grid points ≈ 2.3 M, which takes tens of ms. That is fi
 - Pages:
   - `/` chooses the country (auto-suggested from `Accept-Language` or geolocation, never forced)
   - `/{country}/` lists the waters with a sortable composition table and a GH/KH scatter plot
-  - `/{country}/{method}/` shows recommended blends (pre-rendered for SEO, recalculated live)
+  - `/{country}/{method}/` shows recommended blends (pre-rendered for SEO, recalculated live).
+    Inputs: method, coffee style, and optional flavour goals ("I want: 🌸 florals 🍓 fruit").
+    Each result shows its flavour bars and warnings
   - `/{country}/waters/{id}` is the water detail page: label values, source, "pairs well with"
   - `/learn/` explains the chemistry (GH, KH, why Mg, why not tap water…)
   - `/calculator` is the "I have these bottles at home" mode: tick waters and get the best mix
@@ -187,6 +229,8 @@ Triples: 9,880 × ~231 grid points ≈ 2.3 M, which takes tens of ms. That is fi
 ├── data/
 │   ├── countries.json
 │   ├── profiles.json          brew targets
+│   ├── flavor-model.json      chemistry → flavour emphasis rules
+│   ├── coffee-styles.json     flavour potential per coffee style
 │   └── waters/
 │       └── fr.json            seed: France
 ├── docs/
@@ -200,6 +244,7 @@ Triples: 9,880 × ~231 grid points ≈ 2.3 M, which takes tens of ms. That is fi
 │   │   ├── schema.ts
 │   │   ├── chemistry.ts
 │   │   ├── optimizer.ts
+│   │   ├── flavor.ts
 │   │   └── *.test.ts
 │   └── web/                   Astro app (phase 1)
 └── .github/workflows/ci.yml

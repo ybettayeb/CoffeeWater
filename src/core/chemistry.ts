@@ -32,14 +32,16 @@ export function kh(c: Composition): number {
 export type Metrics = Record<Metric, number | undefined>;
 
 export function metrics(c: Composition): Metrics {
+  const total = gh(c);
   return {
-    gh: gh(c),
+    gh: total,
     kh: kh(c),
     tds: c.tds,
     sodium: c.sodium,
     chloride: c.chloride,
     sulfate: c.sulfate,
     caMgRatio: c.magnesium > 0 ? c.calcium / c.magnesium : undefined,
+    mgShare: total > 0 ? (c.magnesium * AS_CACO3.magnesium) / total : undefined,
   };
 }
 

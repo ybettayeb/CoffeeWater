@@ -21,6 +21,8 @@ npm run check                                   # typecheck + data validation + 
 npm run recommend -- FR filter-light            # top blends for light-roast filter in France
 npm run recommend -- FR espresso
 npm run recommend -- FR filter-medium-dark --max 3 --distilled
+npm run recommend -- FR filter-light --coffee washed-light   # what ends up in your cup
+npm run recommend -- FR espresso --emphasize chocolate       # optimise for a flavour goal
 ```
 
 ## How it works
@@ -31,6 +33,9 @@ npm run recommend -- FR filter-medium-dark --max 3 --distilled
   - `chemistry.ts`: GH = 2.497·Ca + 4.118·Mg, KH = 0.8202·HCO₃⁻, linear blending, ionic balance.
   - `optimizer.ts`: searches singles, pairs (1 % steps) and triples (5 % steps), scores them against the profile,
     and prefers simpler recipes. It outputs per-litre volumes and "bottle math".
+- `data/flavor-model.json` + `src/core/flavor.ts` translate chemistry into flavour tendencies (acidity, florals,
+  fruit, sweetness, body, chocolate) plus warnings, each with a confidence level and a plain-language "why".
+  `data/coffee-styles.json` adds the coffee's own potential, since water can't add flavours the coffee lacks.
 - `scripts/validate-data.ts` checks the schema, ids, ionic balance (catches typos) and TDS plausibility.
 
 ## Contributing data
